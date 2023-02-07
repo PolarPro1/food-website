@@ -1,0 +1,48 @@
+<html>
+  <head>
+    <script>
+      function addToLeaderboard(name, score) {
+        // Get the leaderboard from local storage or create a new one
+        let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
+
+        // Add the new score to the leaderboard
+        leaderboard.push({name: name, score: score});
+
+        // Sort the leaderboard by score in descending order
+        leaderboard.sort((a, b) => b.score - a.score);
+
+        // Store the updated leaderboard in local storage
+        localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
+
+        // Refresh the display of the leaderboard
+        displayLeaderboard();
+      }
+
+      function displayLeaderboard() {
+        // Get the leaderboard from local storage
+        let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
+
+        // Build the HTML for the leaderboard
+        let html = "";
+        for (let i = 0; i < leaderboard.length; i++) {
+          html += "<tr><td>" + (i + 1) + "</td><td>" + leaderboard[i].name + "</td><td>" + leaderboard[i].score + "</td></tr>";
+        }
+
+        // Update the leaderboard table with the new HTML
+        document.getElementById("leaderboard").innerHTML = html;
+      }
+    </script>
+  </head>
+  <body onload="displayLeaderboard()">
+    <h1>Gym Food: Bulking Leaderboard</h1>
+    <table id="leaderboard">
+      <tr><th>Rank</th><th>Name</th><th>Score</th></tr>
+    </table>
+    <br>
+    <form onsubmit="addToLeaderboard(this.name.value, this.score.value); return false;">
+      <label>Name: <input type="text" name="name"></label>
+      <label>Score: <input type="number" name="score"></label>
+      <input type="submit" value="Add">
+    </form>
+  </body>
+</html>
